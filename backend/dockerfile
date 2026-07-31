@@ -1,0 +1,27 @@
+# ---------- Base: dependency yang sama untuk dev & production ----------
+FROM python:3.11-slim AS base
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# ---------- Development ----------
+FROM base AS development
+
+COPY . .
+
+EXPOSE 5000
+
+CMD ["flask", "--app", "app.py", "run", "--host=0.0.0.0", "--port=5000", "--debug"]
+
+# ---------- Production ----------
+FROM base AS production
+
+RUN pip install --no-cache-dir gunicorn
+
+COPY . .
+
+EXPOSE 5000
+
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "3", "app:app"]

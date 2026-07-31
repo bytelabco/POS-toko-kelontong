@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: bytelab_db
+    restart: always
+    environment:
+      POSTGRES_DB: bytelab_toko
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # Port TIDAK di-expose ke luar — database hanya boleh diakses dari dalam jaringan Docker
+
+  backend:
+    build:
+      context: ./backend
+      target: production
+    container_name: bytelab_backend
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/bytelab_toko
+      SECRET_KEY: ${SECRET_KEY}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      FLASK_DEBUG: "False"
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      target: production
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL}
+    container_name: bytelab_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:

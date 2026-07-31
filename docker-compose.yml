@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: bytelab_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: bytelab_toko
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      target: development
+    container_name: bytelab_backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      # Overwrite DATABASE_URL dari .env — di dalam jaringan Docker,
+      # host database bukan "localhost" tapi nama service "db"
+      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/bytelab_toko
+    volumes:
+      - ./backend:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      target: development
+    container_name: bytelab_frontend
+    restart: unless-stopped
+    env_file:
+      - ./frontend/.env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    stdin_open: true
+
+volumes:
+  pgdata:
