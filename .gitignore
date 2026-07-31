@@ -1,0 +1,42 @@
+# Environment variables — JANGAN pernah commit file ini, isinya SECRET_KEY & password database
+.env
+.env.local
+.env.production
+backend/.env
+frontend/.env
+frontend/.env.production
+
+# Python
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+
+# Node (frontend)
+node_modules/
+frontend/node_modules/
+frontend/build/
+
+# Database
+*.db
+*.sqlite3
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
