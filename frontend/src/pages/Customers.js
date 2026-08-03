@@ -17,7 +17,7 @@ export default function Customers() {
   const [loading, setLoading] = useState(false)
 
   const fetchCustomers = () => {
-    axios.get('http://localhost:5000/api/customers', { headers })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/customers`, { headers })
       .then(res => setCustomers(res.data))
   }
 
@@ -28,9 +28,9 @@ export default function Customers() {
     setLoading(true)
     try {
       if (editId) {
-        await axios.put(`http://localhost:5000/api/customers/${editId}`, form, { headers })
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/customers/${editId}`, form, { headers })
       } else {
-        await axios.post('http://localhost:5000/api/customers', form, { headers })
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/customers`, form, { headers })
       }
       fetchCustomers()
       resetForm()
@@ -52,7 +52,7 @@ export default function Customers() {
   const handleDelete = async (id) => {
     if (!window.confirm('Hapus customer ini?')) return
     try {                                                              // ← baru
-      await axios.delete(`http://localhost:5000/api/customers/${id}`, { headers })
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/customers/${id}`, { headers })
       fetchCustomers()
       setSelectedCustomer(null)
       setHistory(null)
@@ -63,7 +63,7 @@ export default function Customers() {
 
   const handleViewHistory = async (c) => {
     setSelectedCustomer(c)
-    const res = await axios.get(`http://localhost:5000/api/customers/${c.id}/history`, { headers })
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/customers/${c.id}/history`, { headers })
     setHistory(res.data)
   }
 

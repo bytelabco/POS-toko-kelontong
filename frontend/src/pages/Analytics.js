@@ -35,7 +35,7 @@ export default function Analytics() {
     const params = {}
     if (from) params.date_from = from
     if (to)   params.date_to   = to
-    axios.get('http://localhost:5000/api/analytics', { headers, params })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/analytics`, { headers, params })
       .then(res => {
         setData(res.data)
         if (!from && !to) {
@@ -82,7 +82,7 @@ export default function Analytics() {
         if (appliedFilters.dateFrom) params.date_from = appliedFilters.dateFrom
         if (appliedFilters.dateTo)   params.date_to   = appliedFilters.dateTo
         const res = await axios.get(
-          `http://localhost:5000/api/analytics/product/${product.id}/variant-breakdown`,
+          `${process.env.REACT_APP_API_URL}/api/analytics/product/${product.id}/variant-breakdown`,
           { headers, params }
         )
         setBreakdowns(prev => ({ ...prev, [product.id]: res.data }))

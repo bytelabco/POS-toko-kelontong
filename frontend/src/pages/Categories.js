@@ -12,7 +12,7 @@ export default function Categories() {
   const [loading, setLoading] = useState(false)
 
   const fetchCategories = () => {
-    axios.get('http://localhost:5000/api/categories', { headers })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/categories`, { headers })
       .then(res => setCategories(res.data))
   }
 
@@ -25,7 +25,7 @@ export default function Categories() {
     setLoading(true)
     setError('')
     try {
-      await axios.post('http://localhost:5000/api/categories',
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/categories`,
         { name: newCategory.trim() }, { headers })
       setNewCategory('')
       fetchCategories()
@@ -39,7 +39,7 @@ export default function Categories() {
   const handleDelete = async (id, name) => {
     if (!window.confirm(`Hapus kategori "${name}"? Produk dengan kategori ini akan kehilangan kategorinya.`)) return
     try {
-      await axios.delete(`http://localhost:5000/api/categories/${id}`, { headers })
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/categories/${id}`, { headers })
       fetchCategories()
     } catch (err) {
       alert(err.response?.data?.error || 'Gagal menghapus kategori')

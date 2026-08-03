@@ -31,9 +31,9 @@ export default function Restock() {
   const [selectedVariant, setSelectedVariant] = useState(null)
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/products', { headers }).then(res => setProducts(res.data))
-    axios.get('http://localhost:5000/api/restock', { headers }).then(res => setHistory(res.data))
-    axios.get('http://localhost:5000/api/suppliers', { headers }).then(res => setSuppliers(res.data))
+    axios.get(`${process.env.REACT_APP_API_URL}/api/products`, { headers }).then(res => setProducts(res.data))
+    axios.get(`${process.env.REACT_APP_API_URL}/api/restock`, { headers }).then(res => setHistory(res.data))
+    axios.get(`${process.env.REACT_APP_API_URL}/api/suppliers`, { headers }).then(res => setSuppliers(res.data))
   }, [])
 
   useEffect(() => {
@@ -59,8 +59,8 @@ export default function Restock() {
   }, [form.product_id, form.quantity, form.cost_price, selectedVariant])
 
   const fetchAll = () => {
-    axios.get('http://localhost:5000/api/products', { headers }).then(res => setProducts(res.data))
-    axios.get('http://localhost:5000/api/restock', { headers }).then(res => setHistory(res.data))
+    axios.get(`${process.env.REACT_APP_API_URL}/api/products`, { headers }).then(res => setProducts(res.data))
+    axios.get(`${process.env.REACT_APP_API_URL}/api/restock`, { headers }).then(res => setHistory(res.data))
   }
 
   const handleSubmit = async () => {
@@ -73,7 +73,7 @@ export default function Restock() {
 
     setLoading(true)
     try {
-      await axios.post('http://localhost:5000/api/restock', {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/restock`, {
         product_id:  Number(form.product_id),
         quantity:    Number(form.quantity),
         cost_price:  Number(form.cost_price),
@@ -98,7 +98,7 @@ export default function Restock() {
   const handleVoidRestock = async (id) => {
     if (!window.confirm('Batalkan restock ini? Stok akan dikurangi kembali dan avg cost akan dihitung ulang.')) return
     try {
-      await axios.post(`http://localhost:5000/api/restock/${id}/void`, {}, { headers })
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/restock/${id}/void`, {}, { headers })
       fetchAll()
     } catch (err) {
       alert(err.response?.data?.error || 'Gagal membatalkan restock')

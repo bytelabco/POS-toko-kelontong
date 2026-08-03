@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
 
-const API = 'http://localhost:5000/api/products'
+const API = `${process.env.REACT_APP_API_URL}/api/products`
 
 const SIZE_ORDER = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
 
@@ -178,7 +178,7 @@ export default function Products() {
   const [editingVariant, setEditingVariant] = useState(null)
 
   const fetchProducts = () => axios.get(API, { headers }).then(res => setProducts(res.data))
-  const fetchCategories = () => axios.get('http://localhost:5000/api/categories', { headers })
+  const fetchCategories = () => axios.get(`${process.env.REACT_APP_API_URL}/api/categories`, { headers })
     .then(res => setCategories(res.data))
 
   useEffect(() => {

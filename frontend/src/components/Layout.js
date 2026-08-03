@@ -15,7 +15,7 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     if (!token) return
-    axios.get('http://localhost:5000/api/shifts/active', {
+    axios.get(`${process.env.REACT_APP_API_URL}/api/shifts/active`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => setActiveShift(res.data)).catch(() => {})
   }, [token])
@@ -23,7 +23,7 @@ export default function Layout({ children }) {
   const handleCloseShift = async () => {
     setClosing(true)
     try {
-      await axios.post('http://localhost:5000/api/shifts/close',
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/shifts/close`,
         { closing_cash: Number(closingCash) || 0 },
         { headers: { Authorization: `Bearer ${token}` } }
       )

@@ -17,7 +17,7 @@ export default function Vouchers() {
   const [editId, setEditId] = useState(null)
 
   const fetchVouchers = () => {
-    axios.get('http://localhost:5000/api/vouchers', { headers })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/vouchers`, { headers })
       .then(res => setVouchers(res.data))
   }
 
@@ -38,7 +38,7 @@ export default function Vouchers() {
     setError('')
     try {
       if (editId) {
-        await axios.put(`http://localhost:5000/api/vouchers/${editId}`, {
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/vouchers/${editId}`, {
           discount_type:   form.discount_type,
           discount_value:  Number(form.discount_value),
           min_transaction: Number(form.min_transaction || 0),
@@ -46,7 +46,7 @@ export default function Vouchers() {
           expired_at:      form.expired_at || null
         }, { headers })
       } else {
-        await axios.post('http://localhost:5000/api/vouchers', {
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/vouchers`, {
           ...form,
           code:            form.code.toUpperCase(),
           discount_value:  Number(form.discount_value),
@@ -79,13 +79,13 @@ export default function Vouchers() {
   }
 
   const handleToggle = async (id) => {
-    await axios.patch(`http://localhost:5000/api/vouchers/${id}/toggle`, {}, { headers })
+    await axios.patch(`${process.env.REACT_APP_API_URL}/api/vouchers/${id}/toggle`, {}, { headers })
     fetchVouchers()
   }
 
   const handleDelete = async (id, code) => {
     if (!window.confirm(`Hapus voucher "${code}"?`)) return
-    await axios.delete(`http://localhost:5000/api/vouchers/${id}`, { headers })
+    await axios.delete(`${process.env.REACT_APP_API_URL}/api/vouchers/${id}`, { headers })
     fetchVouchers()
   }
 

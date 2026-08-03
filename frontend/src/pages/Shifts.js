@@ -17,9 +17,9 @@ export default function Shifts() {
   const [showCloseForm, setShowCloseForm] = useState(false)
 
   const fetchAll = () => {
-    axios.get('http://localhost:5000/api/shifts/active', { headers })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/shifts/active`, { headers })
       .then(res => setActiveShift(res.data))
-    axios.get('http://localhost:5000/api/shifts', { headers })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/shifts`, { headers })
       .then(res => setShifts(res.data))
       .catch(err => {                                                   // ← baru
         if (err.response?.status === 403) setShiftsAccessDenied(true)
@@ -31,7 +31,7 @@ export default function Shifts() {
   const handleOpenShift = async () => {
     setLoading(true)
     try {
-      await axios.post('http://localhost:5000/api/shifts/open', {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/shifts/open`, {
         opening_cash: Number(openingCash || 0)
       }, { headers })
       setOpeningCash('')
@@ -46,7 +46,7 @@ export default function Shifts() {
   const handleCloseShift = async () => {
     setLoading(true)
     try {
-      const res = await axios.post('http://localhost:5000/api/shifts/close', {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/shifts/close`, {
         closing_cash: Number(closingCash || 0),
         notes
       }, { headers })

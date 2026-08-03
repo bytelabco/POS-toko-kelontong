@@ -16,7 +16,7 @@ export default function Suppliers() {
   const [loading, setLoading] = useState(false)
 
   const fetchSuppliers = () => {
-    axios.get('http://localhost:5000/api/suppliers', { headers })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/suppliers`, { headers })
       .then(res => setSuppliers(res.data))
   }
 
@@ -27,9 +27,9 @@ export default function Suppliers() {
     setLoading(true)
     try {
       if (editId) {
-        await axios.put(`http://localhost:5000/api/suppliers/${editId}`, form, { headers })
+        await axios.put(`${process.env.REACT_APP_API_URL}/api/suppliers/${editId}`, form, { headers })
       } else {
-        await axios.post('http://localhost:5000/api/suppliers', form, { headers })
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/suppliers`, form, { headers })
       }
       fetchSuppliers()
       resetForm()
@@ -57,7 +57,7 @@ export default function Suppliers() {
   const handleDelete = async (id) => {
     if (!window.confirm('Hapus supplier ini?')) return
     try {
-      await axios.delete(`http://localhost:5000/api/suppliers/${id}`, { headers })
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/suppliers/${id}`, { headers })
       fetchSuppliers()
       setSelectedSupplier(null)
       setHistory(null)
@@ -69,7 +69,7 @@ export default function Suppliers() {
   const handleViewHistory = async (s) => {
     setSelectedSupplier(s)
     try {
-      const res = await axios.get(`http://localhost:5000/api/suppliers/${s.id}/history`, { headers })
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/suppliers/${s.id}/history`, { headers })
       setHistory(res.data)
     } catch (err) {
       alert(err.response?.data?.error || 'Gagal memuat riwayat supplier')

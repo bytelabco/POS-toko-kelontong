@@ -29,7 +29,7 @@ export default function History() {
     const params = {}
     if (dateFrom) params.date_from = dateFrom
     if (dateTo)   params.date_to   = dateTo
-    axios.get('http://localhost:5000/api/history', { headers, params })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/history`, { headers, params })
       .then(res => setTransactions(res.data))
   }
 
@@ -46,14 +46,14 @@ export default function History() {
     setFilterStatus('all')
     setSearch('')
     setAppliedFilters({ dateFrom: '', dateTo: '', status: 'all' })
-    axios.get('http://localhost:5000/api/history', { headers })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/history`, { headers })
       .then(res => setTransactions(res.data))
   }
 
   const handleVoid = async (id) => {
     if (!window.confirm('Batalkan transaksi ini? Stok akan dikembalikan.')) return
     try {
-      await axios.post(`http://localhost:5000/api/transactions/${id}/void`, {}, { headers })
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/transactions/${id}/void`, {}, { headers })
       fetchHistory()
     } catch (err) {
       alert(err.response?.data?.error || 'Gagal membatalkan transaksi')
@@ -66,7 +66,7 @@ export default function History() {
     if (appliedFilters.dateTo)           params.append('date_to', appliedFilters.dateTo)
     if (appliedFilters.status !== 'all') params.append('status', appliedFilters.status)
 
-    fetch(`http://localhost:5000/api/export/${type}?${params.toString()}`, { headers })
+    fetch(`${process.env.REACT_APP_API_URL}/api/export/${type}?${params.toString()}`, { headers })
       .then(res => res.blob())
       .then(blob => {
         const a    = document.createElement('a')

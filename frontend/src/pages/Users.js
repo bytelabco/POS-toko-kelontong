@@ -12,7 +12,7 @@ export default function Users() {
   const headers = { Authorization: `Bearer ${token}` }
 
   const fetchUsers = () => {
-    axios.get('http://localhost:5000/api/auth/users', { headers })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/auth/users`, { headers })
       .then(res => setUsers(res.data))
   }
 
@@ -21,7 +21,7 @@ export default function Users() {
   const handleSubmit = async () => {
     if (!form.username || !form.password) return setError('Isi semua field!')
     try {
-      await axios.post('http://localhost:5000/api/auth/register', form, { headers })
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/register`, form, { headers })
       fetchUsers()
       setForm({ username: '', password: '', role: 'cashier' })
       setShowForm(false)
@@ -33,7 +33,7 @@ export default function Users() {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Hapus user ini?')) return
-    await axios.delete(`http://localhost:5000/api/auth/users/${id}`, { headers })
+    await axios.delete(`${process.env.REACT_APP_API_URL}/api/auth/users/${id}`, { headers })
     fetchUsers()
   }
 

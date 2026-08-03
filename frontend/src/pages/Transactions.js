@@ -43,9 +43,9 @@ export default function Transactions() {
   const [showCustomerDropdown, setShowCustomerDropdown] = useState(false)
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/products', { headers })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/products`, { headers })
       .then(res => setProducts(res.data))
-    axios.get('http://localhost:5000/api/customers', { headers })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/customers`, { headers })
       .then(res => setCustomers(res.data))
   }, [])
 
@@ -145,7 +145,7 @@ export default function Transactions() {
     setVoucherError('')
     setVoucherData(null)
     try {
-      const res = await axios.post('http://localhost:5000/api/vouchers/check', {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/vouchers/check`, {
         code:  voucherCode,
         total: subtotalKeseluruhan
       }, { headers })
@@ -180,7 +180,7 @@ export default function Transactions() {
     }
     setLoading(true)
     try {
-      const res = await axios.post('http://localhost:5000/api/transactions', {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/transactions`, {
         items: items.map(i => ({
           product_id: Number(i.product_id),
           quantity:   Number(i.quantity),

@@ -13,13 +13,13 @@ export default function Dashboard() {
   const [activeUsers, setActiveUsers] = useState(null)
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/dashboard', { headers })
+    axios.get(`${process.env.REACT_APP_API_URL}/api/dashboard`, { headers })
       .then(res => setData(res.data))
   }, [])
 
   useEffect(() => {
     if (role === 'owner' || role === 'manager') {
-      axios.get('http://localhost:5000/api/shifts/active-users', { headers })
+      axios.get(`${process.env.REACT_APP_API_URL}/api/shifts/active-users`, { headers })
         .then(res => setActiveUsers(res.data))
         .catch(() => setActiveUsers([]))
     }
