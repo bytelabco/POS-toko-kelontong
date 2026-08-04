@@ -18,8 +18,16 @@ export default function Login() {
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, form)
       login(res.data.token, res.data.username, res.data.role)
       navigate('/')
-    } catch {
-      setError('Username atau password salah')
+    } catch (err) {
+      if (err.response?.status === 401) {
+        setError('Username atau password salah')
+      } else if (err.response) {
+        setError(`Error ${err.response.status}: ${err.response.data?.error || 'Terjadi kesalahan pada server'}`)
+      } else if (err.request) {
+        setError('Tidak bisa terhubung ke server, cek koneksi Anda')
+      } else {
+        setError(`Terjadi kesalahan: ${err.message}`)
+      }
     } finally {
       setLoading(false)
     }
